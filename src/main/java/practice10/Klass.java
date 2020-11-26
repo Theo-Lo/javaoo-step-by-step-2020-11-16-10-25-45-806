@@ -1,14 +1,18 @@
 package practice10;
 
+import java.util.ArrayList;
+import java.util.List;
 
+//todo remove member
 public class Klass {
     private Integer number;
     private Student leader;
-    private Student member;
-    private String displayName;
+    private Teacher teacher;
+    private final List<Student> students = new ArrayList<>();
 
     public Klass(int number){
         this.number = number;
+        teacher = null;
     }
 
     public int getNumber() {
@@ -19,13 +23,15 @@ public class Klass {
         return "Class " + number;
     }
 
+    // update Tom
     public void assignLeader(Student leader) {
-        if(leader.getKlass().getNumber() == number){
-            System.out.print("I am Tom. I know "+leader.getName()+" become Leader of "+leader.getKlass().getDisplayName()+".\n");
-            this.leader = leader;
-        }
-        else{
+        if (!isIn(leader)) {
             System.out.print("It is not one of us.\n");
+            return;
+        }
+        this.leader = leader;
+        if (getTeacher() != null){
+            getTeacher().notifyBecomeMonitor(this, leader);
         }
     }
 
@@ -33,12 +39,20 @@ public class Klass {
         return leader;
     }
 
+    public Teacher getTeacher() { return teacher;}
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+
+    //update tom
     public void appendMember(Student student) {
-        if(getLeader() == null){
-            System.out.print("I am Tom. I know "+student.getName()+" has joined "+getDisplayName()+".\n");
-        }else{
-            System.out.print("I am "+leader.getName()+". I know "+student.getName()+" has joined "+getDisplayName()+".\n");
-        }
-        student.getKlass().number = number;
+        this.students.add(student);
+        if (getTeacher() != null) getTeacher().notifyJoinClass(this, student);
+    }
+
+    public boolean isIn(Student student){
+        return this.students.contains(student);
     }
 }

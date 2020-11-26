@@ -1,5 +1,7 @@
 package practice10;
 
+
+// todo format code
 public class Person {
     private String name;
     private int age;

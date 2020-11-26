@@ -1,6 +1,7 @@
 package practice10;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,9 +11,14 @@ public class Teacher extends Person {
     public Teacher(int id, String name, int age, List<Klass> classes) {
         super(id, name, age);
         this.classes = classes;
+
+        for (Klass klass : classes) {
+            klass.setTeacher(this);
+        }
     }
     public Teacher(int id, String name, int age) {
         super(id, name, age);
+        this.classes = new LinkedList<>();
     }
 
     public Klass getKlass() {
@@ -37,20 +43,30 @@ public class Teacher extends Person {
         return super.introduce()+" I am a Teacher. I teach ";
     }
 
+    // remove else
     public String introduceWith(Student student) {
         if(isTeaching(student)){
             return  getIntroduce()+student.getName()+".";
-        }else{
-            return  super.introduce()+" I am a Teacher. I don't teach "+student.getName()+".";
         }
+        return  super.introduce()+" I am a Teacher. I don't teach "+student.getName()+".";
 
     }
 
+
+    //use back isIn
     public boolean isTeaching(Student student) {
-        boolean isInTeacherClasses = getClasses().stream()
-                .map(Klass::getNumber)
-                .anyMatch(classNumber->classNumber.equals(student.getKlass().getNumber()));
-        return isInTeacherClasses;
+        for (Klass klass : getClasses()) {
+            if (klass.isIn(student)) return true;
+        }
+        return false;
+    }
+
+    public void notifyJoinClass(Klass klass, Student student) {
+        System.out.print("I am " + getName() + ". I know " + student.getName() + " has joined " + klass.getDisplayName() + ".\n");
+    }
+
+    public void notifyBecomeMonitor(Klass klass, Student student) {
+        System.out.print("I am " + getName() + ". I know " + student.getName() + " become Leader of " + klass.getDisplayName() + ".\n");
     }
 
     public List<Klass> getClasses() {

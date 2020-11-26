@@ -5,6 +5,7 @@ public class Student extends Person {
     public Student(int id, String name, int age, Klass klass) {
         super(id, name, age);
         this.klass = klass;
+        this.klass.appendMember(this);
     }
 
     public Student(int id, String name, int age) {
@@ -14,6 +15,7 @@ public class Student extends Person {
         return klass;
     }
 
+    // use this.equals(klass.getLeader())
     public String introduce() {
         if(klass.getLeader()==null){
             return super.introduce()+" "+"I am a Student. I am at Class "+klass.getNumber()+".";
